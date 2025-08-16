@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Jaap Mala</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit:ital@0;1&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for a Divine Hinduism Theme */
+        :root {
+            --bg-light: #fff8e1; /* Light Cream */
+            --surface-light: rgba(255, 248, 225, 0.85);
+            --text-primary-light: #4e342e; /* Dark Brown */
+            --text-secondary-light: #795548; /* Brown */
+            --accent-light: #ff6f00; /* Saffron/Orange */
+            --shadow-light: 0 15px 35px rgba(78, 52, 46, 0.15);
+
+            --bg-dark: #263238; /* Deep Blue Grey */
+            --surface-dark: rgba(38, 50, 56, 0.85);
+            --text-primary-dark: #eceff1; /* Off White */
+            --text-secondary-dark: #b0bec5; /* Light Blue Grey */
+            --accent-dark: #ffab40; /* Golden Orange */
+            --shadow-dark: 0 15px 35px rgba(0, 0, 0, 0.3);
+
+            --font-main: 'Tiro Devanagari Sanskrit', serif;
+            --font-ui: 'Poppins', sans-serif;
+        }
+
+        /* Base Styles */
+        body {
+            font-family: var(--font-ui);
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow: hidden;
+            transition: background-color 0.5s ease;
+        }
+        
+        /* Divine "Om" Background Animation */
+        #divine-animation-bg {
+            position: fixed; width: 100%; height: 100%;
+            top: 0; left: 0; z-index: -1; overflow: hidden;
+        }
+        .om-symbol {
+            position: absolute;
+            font-family: 'Tiro Devanagari Sanskrit', serif;
+            font-size: 5vmax;
+            opacity: 0;
+            animation: float-om 25s infinite ease-in-out;
+        }
+        .light-mode .om-symbol { color: rgba(255, 111, 0, 0.1); }
+        .dark-mode .om-symbol { color: rgba(255, 171, 64, 0.1); }
+        
+        @keyframes float-om {
+            0% { transform: translateY(110vh) translateX(var(--x-start)) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-10vh) translateX(var(--x-end)) rotate(360deg); opacity: 0; }
+        }
+
+        /* Light & Dark Mode */
+        body.light-mode { background-color: var(--bg-light); color: var(--text-primary-light); }
+        body.dark-mode { background-color: var(--bg-dark); color: var(--text-primary-dark); }
+
+        /* Header */
+        .app-header {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 1rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 100; box-sizing: border-box;
+        }
+        .header-title {
+            font-family: var(--font-main); font-size: 1.8rem; font-weight: 600;
+            position: absolute; left: 50%; transform: translateX(-50%);
+        }
+
+        /* Modern Menu */
+        .menu-container { position: relative; }
+        .menu-toggle { background: none; border: none; cursor: pointer; padding: 0; z-index: 102; }
+        .menu-icon { width: 24px; height: 24px; transition: color 0.3s; }
+        .light-mode .menu-icon { color: var(--text-primary-light); }
+        .dark-mode .menu-icon { color: var(--text-primary-dark); }
+
+        .dropdown-menu {
+            position: absolute; top: 40px; left: 0;
+            background: var(--surface-light); border-radius: 12px; padding: 0.5rem;
+            box-shadow: var(--shadow-light); list-style: none; margin: 0; width: 200px;
+            opacity: 0; transform: translateY(-10px); visibility: hidden; z-index: 101;
+            transition: all 0.3s ease; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+        }
+        .light-mode .dropdown-menu { background: var(--surface-light); box-shadow: var(--shadow-light); }
+        .dark-mode .dropdown-menu { background: var(--surface-dark); box-shadow: var(--shadow-dark); }
+        .dropdown-menu.active { opacity: 1; transform: translateY(0); visibility: visible; }
+        .dropdown-menu > li { position: relative; }
+        .menu-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.75rem 1rem; text-decoration: none;
+            border-radius: 8px; transition: background-color 0.2s; cursor: pointer;
+        }
+        .light-mode .menu-item { color: var(--text-secondary-light); }
+        .dark-mode .menu-item { color: var(--text-secondary-dark); }
+        .light-mode .menu-item:hover { background-color: rgba(0,0,0,0.05); }
+        .dark-mode .menu-item:hover { background-color: rgba(255,255,255,0.05); }
+        
+        .submenu {
+            position: absolute; left: 100%; top: -0.5rem;
+            list-style: none; padding: 0.5rem; margin: 0 0 0 0.5rem;
+            background: var(--surface-light); border-radius: 8px;
+            display: none; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .light-mode .submenu { background: var(--bg-light); }
+        .dark-mode .submenu { background: var(--bg-dark); }
+        .submenu.active { display: block; opacity: 1; visibility: visible; }
+        .submenu li { padding: 0.5rem 1rem; border-radius: 6px; white-space: nowrap; }
+        .submenu li:hover { background-color: rgba(0,0,0,0.05); }
+        .dark-mode .submenu li:hover { background-color: rgba(255,255,255,0.05); }
+
+        /* Main container */
+        .app-container {
+            width: 90%; max-width: 400px; padding: 1.5rem; border-radius: 20px;
+            transition: all 0.5s ease; position: relative; z-index: 1;
+            text-align: center; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .light-mode .app-container { border-color: rgba(0,0,0,0.1); background-color: var(--surface-light); box-shadow: var(--shadow-light); }
+        .dark-mode .app-container { border-color: rgba(255,255,255,0.1); background-color: var(--surface-dark); box-shadow: var(--shadow-dark); }
+
+        /* Counter display with Progress Bar (UPDATED SIZE) */
+        .counter-display { margin: 1rem 0; position: relative; width: 220px; height: 220px; margin: 1rem auto; }
+        .progress-ring { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .progress-ring__circle { transition: 0.35s stroke-dashoffset; transform: rotate(-90deg); transform-origin: 50% 50%; }
+        .counter-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        #jaap-count { font-family: var(--font-main); font-size: 5rem; font-weight: 600; line-height: 1; transition: color 0.5s ease; }
+        .light-mode #jaap-count { color: var(--accent-light); }
+        .dark-mode #jaap-count { color: var(--accent-dark); }
+        #jaap-info { font-size: 1rem; margin-top: 0.5rem; transition: color 0.5s ease; }
+        .light-mode #jaap-info { color: var(--text-secondary-light); }
+        .dark-mode #jaap-info { color: var(--text-secondary-dark); }
+
+        /* Bead scroller (UPDATED HEIGHT) */
+        .bead-container { height: 220px; overflow: hidden; cursor: grab; border-top: 1px solid; border-bottom: 1px solid; padding: 0; margin-bottom: 1.5rem; transition: border-color 0.5s ease; position: relative; }
+        .bead-container:active { cursor: grabbing; }
+        .light-mode .bead-container { border-color: rgba(78, 52, 46, 0.2); }
+        .dark-mode .bead-container { border-color: rgba(236, 239, 241, 0.2); }
+        .bead-track { position: absolute; top: 0; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; }
+
+        /* Realistic Bead Styles */
+        .bead { width: 40px; height: 40px; margin: 15px 0; flex-shrink: 0; position: relative; }
+        .bead.rudraksha { border-radius: 50%; background-color: #5d4037; background-image: radial-gradient(circle at 20% 20%, #8d6e63, transparent 70%), radial-gradient(circle at 80% 70%, #4e342e, transparent 70%), linear-gradient(45deg, transparent 48%, rgba(0,0,0,0.3) 50%, transparent 52%), linear-gradient(-45deg, transparent 47%, rgba(0,0,0,0.3) 50%, transparent 53%), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>'); box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 5px 10px rgba(0,0,0,0.3); }
+        .bead.tulsi { border-radius: 50%; background-color: #fdf5e6; background-image: radial-gradient(circle at 25% 25%, #ffffff, transparent 70%), linear-gradient(10deg, #f0ead6 30%, transparent 30%), linear-gradient(-15deg, #e8e0cb 60%, transparent 60%); box-shadow: inset 0 0 8px rgba(0,0,0,0.15), 0 2px 5px rgba(0,0,0,0.05); }
+        .bead.sandalwood { border-radius: 50%; background-color: #a1887f; background-image: radial-gradient(circle at 70% 30%, #e6cfa1, transparent 50%); box-shadow: inset 0 0 12px rgba(50,30,20,0.6), 0 3px 8px rgba(0,0,0,0.2); }
+        .bead.lotus_seed { border-radius: 50% / 45%; background-color: #212121; background-image: radial-gradient(#424242 1px, transparent 1px); background-size: 5px 5px; box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 2px 5px rgba(0,0,0,0.4); }
+        .bead.crystal { border-radius: 50%; background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.8) 100%); border: 1px solid rgba(255,255,255,0.3); box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 5px 15px rgba(0,0,0,0.1); }
+        
+        /* Theme Switcher */
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { display: none; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent-dark); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        /* History Page */
+        .history-page { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 200; transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+        .history-page.active { transform: translateX(0); }
+        .light-mode .history-page { background: var(--bg-light); color: var(--text-primary-light); }
+        .dark-mode .history-page { background: var(--bg-dark); color: var(--text-primary-dark); }
+        .history-header { display: flex; align-items: center; padding: 1rem 5%; }
+        .back-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; margin-right: 1rem; }
+        .light-mode .back-btn { color: var(--text-primary-light); }
+        .dark-mode .back-btn { color: var(--text-primary-dark); }
+        .history-header h2 { font-family: var(--font-main); margin: 0; }
+        .history-content { padding: 0 5% 2rem; overflow-y: auto; height: calc(100vh - 70px); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid; }
+        .light-mode th, .light-mode td { border-color: rgba(78, 52, 46, 0.2); }
+        .dark-mode th, .dark-mode td { border-color: rgba(236, 239, 241, 0.2); }
+        th { font-weight: 600; }
+
+        /* Jaap Completion Notification */
+        .notification {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translate(-50%, -150%);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-family: var(--font-ui);
+            font-weight: 600;
+            z-index: 999;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        .light-mode .notification { background-color: var(--accent-light); color: white; box-shadow: var(--shadow-light); }
+        .dark-mode .notification { background-color: var(--accent-dark); color: #263238; box-shadow: var(--shadow-dark); }
+        .notification.show {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <div id="divine-animation-bg"></div>
+    <div id="notification" class="notification"></div>
+
+    <header class="app-header">
+        <div class="menu-container" id="menu-container">
+            <button class="menu-toggle" id="menu-toggle">
+                <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+            </button>
+            <ul class="dropdown-menu" id="dropdown-menu">
+                <li id="mala-type-parent">
+                    <div class="menu-item">Mala Type <span>&#9656;</span></div>
+                    <ul class="submenu" id="mala-type-submenu">
+                        <li data-mala="rudraksha">Rudraksha</li>
+                        <li data-mala="tulsi">Tulsi</li>
+                        <li data-mala="sandalwood">Sandalwood</li>
+                        <li data-mala="lotus_seed">Lotus Seed</li>
+                        <li data-mala="crystal">Crystal</li>
+                    </ul>
+                </li>
+                <li><div class="menu-item" id="history-btn">Jaap History</div></li>
+            </ul>
+        </div>
+        <h1 class="header-title">Mala Jaap</h1>
+        <label class="switch">
+            <input type="checkbox" id="theme-toggle" checked>
+            <span class="slider"></span>
+        </label>
+    </header>
+
+    <div class="app-container">
+        <div class="counter-display">
+            <svg class="progress-ring" width="220" height="220">
+                <circle class="progress-ring__circle" stroke-width="4" fill="transparent" r="105" cx="110" cy="110" />
+            </svg>
+            <div class="counter-content">
+                <div id="jaap-count">0</div>
+                <div id="jaap-info">Jaap: 0</div>
+            </div>
+        </div>
+        <div class="bead-container" id="bead-container">
+            <div class="bead-track" id="bead-track"></div>
+        </div>
+    </div>
+
+    <!-- History Page -->
+    <div class="history-page" id="history-page">
+        <div class="history-header">
+            <button class="back-btn" id="back-btn">&larr;</button>
+            <h2>Jaap History</h2>
+        </div>
+        <div class="history-content">
+            <table id="history-table">
+                <thead><tr><th>Date</th><th>Day</th><th>Time</th><th>Jaap Count</th><th>Beads Chanted</th><th>Mala Type</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- GSAP Library for Animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // DOM Elements
+        const body = document.body;
+        const notificationEl = document.getElementById('notification');
+        const themeToggle = document.getElementById('theme-toggle');
+        const menuContainer = document.getElementById('menu-container');
+        const menuToggle = document.getElementById('menu-toggle');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const malaTypeParent = document.getElementById('mala-type-parent');
+        const malaTypeSubmenu = document.getElementById('mala-type-submenu');
+        const jaapCountEl = document.getElementById('jaap-count');
+        const jaapInfoEl = document.getElementById('jaap-info');
+        const beadContainer = document.getElementById('bead-container');
+        const beadTrack = document.getElementById('bead-track');
+        const historyBtn = document.getElementById('history-btn');
+        const historyPage = document.getElementById('history-page');
+        const backBtn = document.getElementById('back-btn');
+        const historyTableBody = document.querySelector('#history-table tbody');
+        const progressCircle = document.querySelector('.progress-ring__circle');
+        const divineBg = document.getElementById('divine-animation-bg');
+
+        // Progress Circle setup
+        const radius = progressCircle.r.baseVal.value;
+        const circumference = radius * 2 * Math.PI;
+        progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+        progressCircle.style.strokeDashoffset = circumference;
+
+        // App State
+        let jaapCount = 0;
+        let totalJaap = 0;
+        let currentMalaType = 'rudraksha';
+        const BEAD_HEIGHT = 70;
+        let isAnimating = false;
+        
+        // --- IndexedDB for Persistent Storage ---
+        let db;
+        const dbRequest = indexedDB.open('JaapMalaDB', 1);
+        dbRequest.onupgradeneeded = (e) => {
+            db = e.target.result;
+            if (!db.objectStoreNames.contains('appState')) db.createObjectStore('appState', { keyPath: 'id' });
+            if (!db.objectStoreNames.contains('history')) db.createObjectStore('history', { keyPath: 'id', autoIncrement: true });
+        };
+        dbRequest.onsuccess = (e) => { db = e.target.result; initializeApp(); };
+        dbRequest.onerror = (e) => console.error("Database error: ", e.target.errorCode);
+
+        const saveData = (storeName, data) => {
+            if (!db) return;
+            const tx = db.transaction([storeName], 'readwrite');
+            tx.objectStore(storeName).put(data);
+        };
+
+        // --- THEME & MENU ---
+        themeToggle.addEventListener('change', () => {
+            body.classList.toggle('dark-mode'); body.classList.toggle('light-mode');
+            localStorage.setItem('jaapMalaTheme', body.className);
+            updateProgressRingColor();
+        });
+        menuToggle.addEventListener('click', (e) => { e.stopPropagation(); dropdownMenu.classList.toggle('active'); });
+        malaTypeParent.addEventListener('click', (e) => { e.stopPropagation(); malaTypeSubmenu.classList.toggle('active'); });
+        document.addEventListener('click', () => { dropdownMenu.classList.remove('active'); malaTypeSubmenu.classList.remove('active'); });
+
+        // --- MALA SELECTION ---
+        malaTypeSubmenu.addEventListener('click', (e) => {
+            if (e.target.tagName === 'LI' && e.target.dataset.mala) {
+                currentMalaType = e.target.dataset.mala;
+                generateBeads();
+                saveData('appState', { id: 'userState', jaapCount, totalJaap, currentMalaType });
+                dropdownMenu.classList.remove('active');
+                malaTypeSubmenu.classList.remove('active');
+            }
+        });
+
+        // --- PROGRESS BAR ---
+        function setProgress(percent) {
+            const offset = circumference - percent / 100 * circumference;
+            progressCircle.style.strokeDashoffset = offset;
+        }
+        function updateProgressRingColor() {
+            const color = getComputedStyle(document.documentElement).getPropertyValue(body.classList.contains('dark-mode') ? '--accent-dark' : '--accent-light');
+            progressCircle.style.stroke = color.trim();
+        }
+
+        // --- JAAP COUNTER LOGIC ---
+        const updateUI = () => {
+            jaapCountEl.textContent = jaapCount;
+            jaapInfoEl.textContent = `Jaap: ${totalJaap}`;
+            const progressPercent = (jaapCount === 0) ? 0 : (jaapCount % 108 === 0) ? 100 : (jaapCount % 108) / 108 * 100;
+            setProgress(progressPercent);
+        };
+
+        const incrementCount = () => {
+            jaapCount++;
+            if (jaapCount > 108) {
+                logJaapHistory();
+                jaapCount = 1;
+                totalJaap++;
+                showNotification(`Aapka ${totalJaap} Jaap complete ho gaya hai`);
+            }
+            updateUI();
+            saveData('appState', { id: 'userState', jaapCount, totalJaap, currentMalaType });
+        };
+        
+        // --- NOTIFICATION ---
+        function showNotification(message) {
+            notificationEl.textContent = message;
+            notificationEl.classList.add('show');
+            setTimeout(() => {
+                notificationEl.classList.remove('show');
+            }, 4000);
+        }
+
+        // --- JAAP HISTORY ---
+        const logJaapHistory = () => saveData('history', { timestamp: new Date().toISOString(), beads: 108, mala: currentMalaType });
+
+        const showHistoryPage = () => {
+            if (!db) return;
+            const tx = db.transaction(['history'], 'readonly');
+            const getAllRequest = tx.objectStore('history').getAll();
+            getAllRequest.onsuccess = () => {
+                const history = getAllRequest.result;
+                historyTableBody.innerHTML = history.length === 0 ? '<tr><td colspan="6" style="text-align:center;">No history recorded yet.</td></tr>' : '';
+                history.reverse().forEach(r => {
+                    const d = new Date(r.timestamp);
+                    const mala = r.mala.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    historyTableBody.innerHTML += `<tr><td>${d.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })}</td><td>${d.toLocaleDateString('en-IN', { weekday: 'long' })}</td><td>${d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</td><td>1</td><td>${r.beads}</td><td>${mala}</td></tr>`;
+                });
+                historyPage.classList.add('active');
+            };
+        };
+        historyBtn.addEventListener('click', showHistoryPage);
+        backBtn.addEventListener('click', () => historyPage.classList.remove('active'));
+
+        // --- ROBUST SCROLL LOGIC with GSAP ---
+        const generateBeads = () => {
+            beadTrack.innerHTML = '';
+            // Create more beads than visible to ensure seamless looping
+            for (let i = 0; i < 10; i++) {
+                const bead = document.createElement('div');
+                bead.classList.add('bead', currentMalaType);
+                beadTrack.appendChild(bead);
+            }
+            // Set initial position to center the view
+            gsap.set(beadTrack, { y: -BEAD_HEIGHT * 3 });
+        };
+
+        const triggerScroll = () => {
+            if (isAnimating) return;
+            isAnimating = true;
+
+            incrementCount();
+
+            gsap.to(beadTrack, {
+                y: `-=${BEAD_HEIGHT}`, // Animate down by one bead height
+                duration: 0.5,
+                ease: "power2.out",
+                onComplete: () => {
+                    // Seamlessly move the top bead to the bottom
+                    beadTrack.appendChild(beadTrack.firstElementChild);
+                    gsap.set(beadTrack, { y: `+=${BEAD_HEIGHT}` }); // Reset position without animation
+                    isAnimating = false;
+                }
+            });
+        };
+
+        // Mouse wheel scroll
+        beadContainer.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            if (e.deltaY > 0) { // Only on scroll down
+                triggerScroll();
+            }
+        }, { passive: false });
+
+        // Touch scroll for mobile
+        let touchStartY = 0;
+        beadContainer.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        beadContainer.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touchEndY = e.touches[0].clientY;
+            if (touchStartY - touchEndY > 20) { // Swipe up (scroll down) with a threshold
+                triggerScroll();
+                touchStartY = touchEndY; // Reset start position to prevent multiple triggers from one swipe
+            }
+        }, { passive: false });
+
+        // --- BACKGROUND OM ANIMATION ---
+        function createOmSymbol() {
+            for (let i = 0; i < 10; i++) {
+                const om = document.createElement('div');
+                om.className = 'om-symbol';
+                om.innerHTML = 'ॐ';
+                om.style.setProperty('--x-start', `${Math.random() * 80 + 10}vw`);
+                om.style.setProperty('--x-end', `${Math.random() * 80 + 10}vw`);
+                om.style.animationDelay = `${Math.random() * 25}s`;
+                om.style.fontSize = `${Math.random() * 4 + 2}vmax`;
+                divineBg.appendChild(om);
+            }
+        }
+
+        // --- INITIALIZATION ---
+        function initializeApp() {
+            const tx = db.transaction(['appState'], 'readonly');
+            const getRequest = tx.objectStore('appState').get('userState');
+            getRequest.onsuccess = () => {
+                const savedState = getRequest.result;
+                if (savedState) {
+                    jaapCount = savedState.jaapCount || 0;
+                    totalJaap = savedState.totalJaap || 0;
+                    currentMalaType = savedState.currentMalaType || 'rudraksha';
+                }
+                const savedTheme = localStorage.getItem('jaapMalaTheme') || 'dark-mode';
+                body.className = savedTheme;
+                themeToggle.checked = savedTheme === 'dark-mode';
+                updateProgressRingColor();
+                updateUI();
+                generateBeads();
+                createOmSymbol();
+            };
+        }
+    });
+    </script>
+</body>
+</html>
